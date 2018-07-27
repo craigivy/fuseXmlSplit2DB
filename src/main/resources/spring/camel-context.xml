@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- JBoss, Home of Professional Open Source Copyright 2014, Red Hat, Inc. 
+	and/or its affiliates, and individual contributors by the @authors tag. See 
+	the copyright.txt in the distribution for a full listing of individual contributors. 
+	Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+	use this file except in compliance with the License. You may obtain a copy 
+	of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<!-- Configures the Camel Context -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+	http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://localhost/postgres" />
+		<property name="username" value="postgres" />
+		<property name="password" value="password" />
+	</bean>
+
+	<jdbc:initialize-database data-source="dataSource"
+		enabled="true">
+		<jdbc:script location="classpath:schema.sql" />
+	</jdbc:initialize-database>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg index="0" ref="dataSource"></constructor-arg>
+	</bean>	
+
+	<bean id="xpathRowPopulator" class="com.redhat.fuse.boosters.XPathRowPopulator"/>
+
+    <camelContext id="large-http-streams" 
+        xmlns="http://camel.apache.org/schema/spring">
+
+        <route id="_route1">
+            <from id="file_in" uri="file:in"/>
+            <log id="file_log1" message="${body}"/>
+            <split id="split">
+                <xpath>/items/item</xpath>
+                <log id="split_log" message="split data :  ${body}"/>
+                <to uri="bean:xpathRowPopulator" />
+                			<to uri="stream:out"/>
+			<setBody>
+				<constant>
+					insert into items(id, name, state) values
+					(:?id, :?name, 'new')
+				</constant>
+			</setBody>
+			<to uri="jdbc:dataSource?useHeadersAsParameters=true" />
+			<to uri="log:insertLog?showHeaders=true" />	
+
+                <!-- <to id="_to1" uri="xslt:file:C:\Users\a638030\workspace\Scenario5\data\order.xsl"/>
+                <log id="_log2" message="After XSLT : ${body}"/>
+                <to id="_to2" pattern="InOnly" uri="activemq:queue:OrderDetails"/> -->
+            </split>
+        </route>
+    </camelContext>
+</beans>
