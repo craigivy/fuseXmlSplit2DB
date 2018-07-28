@@ -4,16 +4,13 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.openshift.booster</groupId>
-    <artifactId>booster</artifactId>
+    <groupId>com.craigivy.fuse</groupId>
+    <artifactId>xmlspit2db</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>Fuse :: Boosters :: Health Check</name>
+    <name>Fuse :: XML Split to database</name>
 
     <properties>
-
-        <skipTests>true</skipTests>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -81,42 +78,21 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jackson-starter</artifactId>
         </dependency>
-
-
-
-        <!-- camel 2 -->
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-http4-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jetty-starter</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-stream-starter</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-bindy-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cxf-starter</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jdbc</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.hawt</groupId>
+            <artifactId>hawtio-springboot</artifactId>
+            <version>1.5.10</version>
+        </dependency>
 
-
-
+        <!-- database -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
@@ -126,12 +102,6 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.hawt</groupId>
-            <artifactId>hawtio-springboot</artifactId>
-            <version>1.5.10</version>
         </dependency>
 
         <!-- Test -->
