@@ -59,13 +59,9 @@
 						<handled>
 							<constant>true</constant>
 						</handled>
-						<log id="database_error" message="DB insert error: ${exception.stacktrace}" />
+						<log id="database_error" loggingLevel="ERROR" message="DB insert error: ${exception.stacktrace}" />
 					</doCatch>
 				</doTry>
-
-				<!-- <to id="_to1" uri="xslt:file:C:\Users\a638030\workspace\Scenario5\data\order.xsl"/>
-                <log id="_log2" message="After XSLT : ${body}"/>
-                <to id="_to2" pattern="InOnly" uri="activemq:queue:OrderDetails"/> -->
 			</split>
 		</route>
 	</camelContext>
